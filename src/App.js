@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, createContext, useMemo, useContext } from 'react'
+import TodoPage from './pages/TodoPage'
+import LoginPage from './pages/LoginPage'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const LocationContext = createContext()
+
+function getHref() {
+  const { href } = window.location
+
+  return href.split('/').splice(3).join('/')
 }
 
-export default App;
+function Route({ children, route }) {
+  const { currentRoute } = useContext(LocationContext)
+
+  if (currentRoute !== route) {
+    return null
+  }
+
+  return children
+}
+
+function Switch({ children }) {
+  return children[0]
+}
+
+function App() {
+  const [currentRoute, setCurrentRoute] = useState(getHref())
+
+  const contextValue = useMemo(
+    () => ({ currentRoute, setCurrentRoute }),
+    [currentRoute, setCurrentRoute],
+  )
+
+  return (
+    <div className="app">
+      <LocationContext.Provider value={contextValue}>
+        <Switch>
+          <Route route="">
+            <TodoPage />
+          </Route>
+          <Route route="">
+            <TodoPage />
+          </Route>
+          <Route route="">
+            <TodoPage />
+          </Route>
+          <Route route="login">
+            <LoginPage />
+          </Route>
+        </Switch>
+      </LocationContext.Provider>
+    </div>
+  )
+}
+
+export default App
