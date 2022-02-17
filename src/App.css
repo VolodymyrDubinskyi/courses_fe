@@ -47,3 +47,16 @@
   padding: 4px;
   cursor: pointer;
 }
+
+.login {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.link {
+  text-decoration: underline;
+  color: blue;
+  padding-top: 10px;
+  cursor: pointer;
+}

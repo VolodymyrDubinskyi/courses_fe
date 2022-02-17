@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { memo, useCallback, useState, useEffect, useContext } from 'react'
 import Todo from '../components/Todo'
 import { LocationContext } from '../App'
 
@@ -23,10 +23,12 @@ function TodoPage() {
       text: inputValue,
     }
 
+    const token = localStorage.getItem('accessToken')
     const res = await fetch('http://localhost:3010/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newTodo),
     })
@@ -38,10 +40,13 @@ function TodoPage() {
   }, [inputValue])
 
   const deleteTodo = useCallback(async id => {
+    const token = localStorage.getItem('accessToken')
+
     await fetch(`http://localhost:3010/todos/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
 
@@ -63,10 +68,13 @@ function TodoPage() {
 
   const getTodos = useCallback(async () => {
     try {
+      const token = localStorage.getItem('accessToken')
+
       const res = await fetch('http://localhost:3010/todos', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       })
 
@@ -110,4 +118,4 @@ function TodoPage() {
   )
 }
 
-export default TodoPage
+export default memo(TodoPage)

@@ -1,13 +1,13 @@
 import { useContext, useCallback, useState } from 'react'
 import { LocationContext } from '../App'
 
-function LoginPage() {
+function RegistrationPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { setCurrentRoute } = useContext(LocationContext)
 
-  const goToRegistration = useCallback(() => {
-    setCurrentRoute('registration')
+  const goToLogin = useCallback(() => {
+    setCurrentRoute('login')
   }, [setCurrentRoute])
 
   const onChangeEmail = useCallback(e => {
@@ -18,33 +18,29 @@ function LoginPage() {
     setPassword(e.target.value)
   }, [])
 
-  const login = useCallback(async () => {
-    const res = await fetch('http://localhost:3010/login', {
+  const register = useCallback(async () => {
+    const res = await fetch('http://localhost:3010/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
     })
+
     const result = await res.json()
-
-    localStorage.setItem('accessToken', result.token)
-
-    localStorage.setItem('refreshToken', result.refreshToken)
-    setCurrentRoute('')
-  }, [email, password, setCurrentRoute])
+  }, [email, password])
 
   return (
     <div className="login">
       <input value={email} onChange={onChangeEmail} />
 
       <input value={password} onChange={onChangePassword} />
-      <button onClick={login}>Login</button>
-      <span onClick={goToRegistration} className="link">
-        Go to registration
+      <button onClick={register}>Register</button>
+      <span onClick={goToLogin} className="link">
+        Go to login
       </span>
     </div>
   )
 }
 
-export default LoginPage
+export default RegistrationPage
