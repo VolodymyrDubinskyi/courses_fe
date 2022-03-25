@@ -118,4 +118,6 @@ function TodoPage() {
   )
 }
 
+console.log('++ 1 ++')
+
 export default memo(TodoPage)
